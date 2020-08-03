@@ -26,7 +26,7 @@ let turn;
 
 /*--------------------Event Listeners--------------------*/
 document.querySelector(".gameBoard").addEventListener("click", handleClick);
-
+document.querySelector("button").addEventListener("click", init);
 /*--------------------Functions--------------------*/
 
 //event handler function
@@ -35,19 +35,32 @@ function handleClick(evt) {
   let index = evt.target.id;
   playerChoices[index] = turn % 2 ? "O" : "X";
   render(evt.target);
-  turn++;
+
   console.log(playerChoices);
   if (checkWin()) {
     document
       .querySelector(".gameBoard")
       .removeEventListener("click", handleClick);
+    renderMessage();
+  } else if (turn + 1 === MAXGUESS) {
+    document
+      .querySelector(".gameBoard")
+      .removeEventListener("click", handleClick);
+    document.getElementById("msg").textContent = "Nobody Wins";
   }
+  turn++;
 }
 
 function init() {
   //initialize all state variables
   playerChoices = [null, null, null, null, null, null, null, null, null];
   turn = 0;
+  document.querySelectorAll(".box").forEach(function (el) {
+    el.textContent = "x";
+    el.style.color = "#101357";
+  });
+  document.querySelector(".gameBoard").addEventListener("click", handleClick);
+  document.getElementById("msg").textContent = null;
 }
 
 init();
@@ -66,6 +79,12 @@ function checkWin() {
 function render(element) {
   element.textContent = turn % 2 ? "O" : "X";
   element.style.color = "white";
+}
+
+function renderMessage() {
+  document.getElementById("msg").textContent = `Play ${
+    turn % 2 ? "O" : "X"
+  } Wins!`;
 }
 
 // when use clicks on board, determine if user is 'x' or 'o'
