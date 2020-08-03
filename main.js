@@ -1,93 +1,87 @@
 /*--------------------Constants--------------------*/
-const COLORS{
- empty: undefined,
- player1: 'x',
- player2: 'o',
-};
 
-let TURN= true;
+const MAXGUESS = 9;
+
 //winning combinations
-const winArr = [
-  [0,1,2],
-  [3,4,5],
-  [6,7,8],
-  [0,3,6],
-  [1,4,7],
-  [2,5,8],
-  [0,4,8],
-  [2,4,6]
-]
-
-const squareArr = [square0, square1, square2, square3, square4, square5, square6, square7, square8 ]
+const WINARR = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6],
+];
 
 /*--------------------State Variables--------------------*/
-//squares are undefined to start game then defined later by button click
-let square0;
-let square1;
-let square2;
-let square3;
-let square4;
-let square5;
-let square6;
-let square7;
-let square8;
-
-
-
-
+//squares are undefined to start game then defined later by button click either x or o
+let playerChoices; //player one = 1  player 2= -1
+let turn;
 /*--------------------Cached Element Refrences--------------------*/
-//html square elements
-let square0 = document.getElementById('square-0');
-let square1 = document.getElementById('square-1');
-let square2 = document.getElementById('square-2');
-let square3 = document.getElementById('square-3');
-let square4 = document.getElementById('square-4');
-let square5 = document.getElementById('square-5');
-let square6 = document.getElementById('square-6');
-let square7 = document.getElementById('square-7');
-let square8 = document.getElementById('square-8');
+//html "square" elements
+//let squareEl = document.getElementsByClassName(".gameBoard");
 
-const button = document.getElementsByTagName(button)
+//const button = document.getElementsByTagName(button);
 
 /*--------------------Event Listeners--------------------*/
-document.querySelector('.box').addEventListener('click', play);
-
+document.querySelector(".gameBoard").addEventListener("click", handleClick);
 
 /*--------------------Functions--------------------*/
-//TODO
 
+//event handler function
 
-function play(event){
-  while(winArr.includes[undefined] === false){
-    if(turn = true){
-      COLORS.player1.handleBoxClick();
-    }else {
-      COLORS.player2.handleBoxClick();
-    }
-    turn = !turn;
-    
-    if(gameOver){
-      break;
-    }
+function handleClick(evt) {
+  let index = evt.target.id;
+  playerChoices[index] = turn % 2 ? "O" : "X";
+  render(evt.target);
+  turn++;
+  console.log(playerChoices);
+  if (checkWin()) {
+    document
+      .querySelector(".gameBoard")
+      .removeEventListener("click", handleClick);
   }
-  
 }
 
-
-
-
-
-function gameOver(winArr.includes[undefined] !== true){
-  alert('Game over! Start again!');
+function init() {
+  //initialize all state variables
+  playerChoices = [null, null, null, null, null, null, null, null, null];
+  turn = 0;
 }
 
+init();
 
+function checkWin() {
+  //check if there is a winner
+  return WINARR.some(function (arr) {
+    return (
+      playerChoices[arr[0]] === playerChoices[arr[1]] &&
+      playerChoices[arr[0]] === playerChoices[arr[2]] &&
+      playerChoices[arr[2]]
+    );
+  });
+}
 
+function render(element) {
+  element.textContent = turn % 2 ? "O" : "X";
+  element.style.color = "white";
+}
 
-
-
-
-
+// when use clicks on board, determine if user is 'x' or 'o'
+// turn counter even or odd
+// click on something, render board, update array of player choices
+// did that click generate win?
+// check winning combos and see if any of those match (array.sum method)
+// remove event listener
+// return board? make board not function and invoke reset button
+// check if user generated tie
+// see if turn counter +1 = max number of moves (start at turn 0 and fo to 8)
+// check to see if turn incrementor is same as max numbers of turns
+// if not, out of turns? or who's turn?
+// render an updated board after each turn
+// no win?
+// incrememnt turn counter
 
 //code not used
 /*
